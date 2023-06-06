@@ -1,0 +1,9 @@
+common:
+  vpn_cidr: 10.1.0.0/16
+workspaces:
+  nonprod:
+    account_name: nonprod
+    aws:
+      account_id: 123456789
+      region: hfhfh
+    project_name: tothenew
