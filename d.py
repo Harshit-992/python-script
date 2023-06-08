@@ -95,7 +95,7 @@ modify_yaml_file(val,destination_file,"AVAILABILITY_ZONE_1" , region + "a")
 modify_yaml_file(val,destination_file,"AVAILABILITY_ZONE_2" , region + "b")
 #key change
 val = 'key'
-modify_yaml_file(val,destination_file,"WORKSPACE", project_name + "-" + env)
+modify_yaml_file(val,destination_file,"WORKSPACE", env + "-" + region)
 
 
 
