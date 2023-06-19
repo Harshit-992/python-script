@@ -1,0 +1,14 @@
+[
+{
+    "filter_key": "tag:Name",
+    "filter_value": "Nginx",
+    "ports": [ 22, 80]
+},
+{
+    "filter_key": "tag:Name",
+    "filter_value": "Jenkins",
+    "ports": [8080, 443, 3306]
+}
+
+]
+  
