@@ -16,7 +16,7 @@ with DAG('print_table_of_2_dag', default_args=default_args, schedule_interval=No
     def print_table_of_2():
         for i in range(1, 11):
             result = 2 * i
-            print(f"22 x {i} = {result}")
+            print(f"2 x {i} = {result}")
 
     print_table_task = PythonOperator(
         task_id='print_table_task',
