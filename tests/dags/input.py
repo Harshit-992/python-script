@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
+from airflow.models import Variable
 
 # Define DAG
 dag = DAG(
@@ -10,17 +11,18 @@ dag = DAG(
     catchup=False,
 )
 
+# Define default parameter values using Variables
+Variable.set("number1", "5")
+Variable.set("number2", "7")
+
 # Python function to perform a task using parameters
 def multiply_numbers(**kwargs):
-    # Retrieve parameters from the context
-    params = kwargs['dag_run'].conf
-
-    # Get the values of 'number1' and 'number2' from the parameters
-    number1 = params['number1']
-    number2 = params['number2']
+    # Get the values of 'number1' and 'number2' from Variables
+    number1 = Variable.get("number1")
+    number2 = Variable.get("number2")
 
     # Perform the task (multiply numbers)
-    result = number1 * number2
+    result = int(number1) * int(number2)
 
     # Print the result
     print(f"The result of {number1} * {number2} is {result}")
