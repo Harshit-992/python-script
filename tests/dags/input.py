@@ -1,48 +1,37 @@
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
-from datetime import datetime
+from airflow.utils.dates import days_ago
 
-# Define the default arguments for the DAG
-default_args = {
-    'owner': 'airflow',
-    'start_date': datetime(2023, 10, 1),
-    'retries': 1,
-}
-
-# Create the DAG
+# Define DAG
 dag = DAG(
     'input_name_example',
-    default_args=default_args,
-    description='An example DAG that prompts for a name and prints it',
     schedule_interval=None,  # This DAG is not scheduled
-    catchup=False,  # Don't run missed intervals
+    start_date=days_ago(1),
+    catchup=False,
 )
 
-# Python function to get user input
-def get_name():
-    name = input("Please enter your name: ")
-    return name
+# Python function to perform a task using parameters
+def multiply_numbers(**kwargs):
+    # Retrieve parameters from the context
+    params = kwargs['dag_run'].conf
 
-# Python function to print the name
-def print_name(**kwargs):
-    ti = kwargs['ti']
-    name = ti.xcom_pull(task_ids='get_name_task')
-    print(f'Hello, {name}!')
+    # Get the values of 'number1' and 'number2' from the parameters
+    number1 = params['number1']
+    number2 = params['number2']
 
-# Define the tasks
-get_name_task = PythonOperator(
-    task_id='get_name_task',
-    python_callable=get_name,
+    # Perform the task (multiply numbers)
+    result = number1 * number2
+
+    # Print the result
+    print(f"The result of {number1} * {number2} is {result}")
+
+# Create a PythonOperator that uses parameters
+multiply_task = PythonOperator(
+    task_id='multiply_task',
+    python_callable=multiply_numbers,
     provide_context=True,  # Pass the context to the function
     dag=dag,
 )
 
-print_name_task = PythonOperator(
-    task_id='print_name_task',
-    python_callable=print_name,
-    provide_context=True,  # Pass the context to the function
-    dag=dag,
-)
-
-# Set up task dependencies
-get_name_task >> print_name_task
+# Set the task dependencies (no dependencies in this case)
+multiply_task
