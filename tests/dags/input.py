@@ -11,10 +11,6 @@ dag = DAG(
     catchup=False,
 )
 
-# Define default parameter values using Variables
-Variable.set("number1", "5")
-Variable.set("number2", "7")
-
 # Python function to perform a task using parameters
 def multiply_numbers(**kwargs):
     # Get the values of 'number1' and 'number2' from Variables
