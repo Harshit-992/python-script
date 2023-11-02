@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
+import os  # Import the 'os' module
 
 default_args = {
     'owner': 'airflow',
