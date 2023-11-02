@@ -40,7 +40,10 @@ git_ssh_command = f'GIT_SSH_COMMAND="ssh -i {ssh_key_file}"'
 # Task to set up the SSH key
 set_up_ssh_key = BashOperator(
     task_id='set_up_ssh_key',
-    bash_command=f'cp {ssh_key_file} ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa',
+    bash_command=(
+        'mkdir -p ~/.ssh && '
+        f'cp {ssh_key_file} ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
+    ),
     dag=dag,
 )
 
