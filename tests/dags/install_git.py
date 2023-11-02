@@ -20,7 +20,7 @@ dag = DAG(
 # Use a BashOperator to install git
 install_git_task = BashOperator(
     task_id='install_git',
-    bash_command='apt update &&  apt install -y git', 
+    bash_command='sudo apt update && sudo apt install -y git', 
     dag=dag,
 )
 
