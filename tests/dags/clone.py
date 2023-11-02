@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
+import os  # Import the 'os' module
 
 default_args = {
     'owner': 'airflow',
@@ -46,9 +47,4 @@ set_up_ssh_key = BashOperator(
 # Clone the GitLab repository using the SSH key
 clone_task = BashOperator(
     task_id='clone_repo',
-    bash_command=f'{git_ssh_command} git clone {git_repo_url} {target_directory}',
-    dag=dag,
-)
-
-# Set the task dependencies
-set_up_ssh_key >> clone_task
+    bash_command=f'{git_ssh_command} git
