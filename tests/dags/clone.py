@@ -2,7 +2,6 @@ from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
-import os  # Import the 'os' module
 
 default_args = {
     'owner': 'airflow',
@@ -32,6 +31,7 @@ with open(ssh_key_file, 'w') as f:
     f.write(ssh_key)
 
 # Ensure the temporary file is readable only by the owner
+import os
 os.chmod(ssh_key_file, 0o600)
 
 # Define the GIT_SSH_COMMAND with the path to the temporary SSH key file
@@ -47,4 +47,12 @@ set_up_ssh_key = BashOperator(
 # Clone the GitLab repository using the SSH key
 clone_task = BashOperator(
     task_id='clone_repo',
-    bash_command=f'{git_ssh_command} git
+    bash_command=(
+        f'{git_ssh_command} git clone {git_repo_url} '
+        f'{target_directory}'
+    ),
+    dag=dag,
+)
+
+# Set the task dependencies
+set_up_ssh_key >> clone_task
