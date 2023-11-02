@@ -32,5 +32,3 @@ clone_task = BashOperator(
     ),
     dag=dag,
 )
-
- clone_task
