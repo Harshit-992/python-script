@@ -19,7 +19,7 @@ dag = DAG(
 )
 
 # Define the GitLab repository URL and target directory
-git_repo_url = 'git@github.com:Harshit-992/python-script.git'
+git_repo_url = 'https://github.com/Harshit-992/python-script.git'
 target_directory = '/tmp/mycloud-scripts'  # Adjust the target directory
 
 # Retrieve the SSH key from the Airflow Variable
