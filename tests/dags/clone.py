@@ -11,9 +11,9 @@ default_args = {
 }
 
 dag = DAG(
-    'git_clone_and_list_files',
+    'git_clone_from_gitlab',
     default_args=default_args,
-    description='Clone a GitLab repository and list files using SSH key',
+    description='Clone a GitLab repository using SSH key',
     schedule_interval=None,  # This DAG is not scheduled
     catchup=False,
 )
@@ -25,20 +25,18 @@ target_directory = '/tmp/mycloud-scripts'  # Adjust the target directory
 # Retrieve the SSH key from the Airflow Variable
 ssh_key = Variable.get("ssh_key")
 
+# Define the environment dictionary
+environment = {
+    'GIT_SSH_COMMAND': f'ssh -i <(echo $\'{ssh_key}\')',
+}
+
 # Clone the GitLab repository using the SSH key
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=f'git clone {git_repo_url} {target_directory}',
-    environment={'GIT_SSH_COMMAND': f'ssh -i <(echo $\'{ssh_key}\')'},  # Use the SSH key
-    dag=dag,
-)
-
-# List all files in the cloned directory
-list_files_task = BashOperator(
-    task_id='list_files',
-    bash_command=f'ls {target_directory}',
+    environment=environment,  # Use the environment dictionary
     dag=dag,
 )
 
 # Set the task dependencies
-clone_task >> list_files_task
+clone_task
