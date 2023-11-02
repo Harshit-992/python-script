@@ -42,7 +42,8 @@ set_up_ssh_key = BashOperator(
     task_id='set_up_ssh_key',
     bash_command=(
         'mkdir -p ~/.ssh && '
-        f'cp {ssh_key_file} ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa'
+        f'cp {ssh_key_file} ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa && '
+        'ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts'
     ),
     dag=dag,
 )
