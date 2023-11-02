@@ -25,16 +25,21 @@ target_directory = '/tmp/mycloud-scripts'  # Adjust the target directory
 # Retrieve the SSH key from the Airflow Variable
 ssh_key = Variable.get("ssh_key")
 
-# Define the environment dictionary
-environment = {
-    'GIT_SSH_COMMAND': f'ssh -i <(echo $\'{ssh_key}\')',
-}
+# Create a temporary file and write the SSH key to it
+ssh_key_file = '/tmp/ssh_key'
+with open(ssh_key_file, 'w') as f:
+    f.write(ssh_key)
+
+# Ensure the temporary file is readable only by the owner
+os.chmod(ssh_key_file, 0o600)
+
+# Define the GIT_SSH_COMMAND with the path to the temporary SSH key file
+git_ssh_command = f'GIT_SSH_COMMAND="ssh -i {ssh_key_file}"'
 
 # Clone the GitLab repository using the SSH key
 clone_task = BashOperator(
     task_id='clone_repo',
-    bash_command=f'git clone {git_repo_url} {target_directory}',
-    environment=environment,  # Use the environment dictionary
+    bash_command=f'{git_ssh_command} git clone {git_repo_url} {target_directory}',
     dag=dag,
 )
 
