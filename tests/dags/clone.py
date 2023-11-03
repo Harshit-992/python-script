@@ -26,7 +26,7 @@ folder_path = os.path.expanduser('~/tmp/clone/ssh/')
 
 ssh_key = Variable.get("ssh_key")
 def create_and_write_file():
-    with open(f'{folder_path}ssh_key', 'w') as file:
+    with open(os.path.join(folder_path, 'ssh_key'), 'w') as file:
         file.write(ssh_key)
         
 create_directory_task = BashOperator(
