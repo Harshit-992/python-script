@@ -35,13 +35,21 @@ def setup_ssh_key():
         f.write(ssh_key)
 
     os.chmod(ssh_key_file, 0o600)
-
+def list_files_in_folder():
+    files = os.listdir(folder_path)
+    for file in files:
+        print(f'File in folder: {file}')
+        
 setup_task = PythonOperator(
     task_id='setup_ssh_key',
     python_callable=setup_ssh_key,
     dag=dag,
 )
-
+list_files_task = PythonOperator(
+    task_id='list_files_in_folder',
+    python_callable=list_files_in_folder,
+    dag=dag,
+)
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=(
@@ -50,4 +58,4 @@ clone_task = BashOperator(
     dag=dag,
 )
 
-setup_task >> clone_task
+setup_task >> list_files_task >> clone_task
