@@ -32,6 +32,7 @@ def create_and_write_file():
 create_directory_task = BashOperator(
     task_id='create_directory',
     bash_command=f"""mkdir -p {folder_path}
+                     touch {folder_path}ssh_key
                      ls {folder_path}
     """,
     dag=dag,
