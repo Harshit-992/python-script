@@ -22,7 +22,7 @@ dag = DAG(
 
 git_repo_url = 'git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git'
 target_directory = '/tmp/mycloud-scripts'
-folder_path = '/root/clone/ssh/'
+folder_path = '/tmp/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
 
