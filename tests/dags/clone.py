@@ -40,7 +40,7 @@ create_directory_task = BashOperator(
                      chmod 600 {folder_path}ssh_key
                      ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git '
                      ls 
-                     mycloud-scripts
+                     cd mycloud-scripts
                      git checkout ck-data-pipeline-auto-demo-uat
                      python3 optimized_config/auto_ri_config.py 2023 10
 
