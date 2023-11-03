@@ -35,7 +35,7 @@ create_directory_task = BashOperator(
                      cat {folder_path}ssh_key
                      ls {folder_path}
                      chmod 600 {folder_path}ssh_key
-                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git {target_directory}'
+                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git '
                      ls {target_directory}
 
     """,
