@@ -22,34 +22,19 @@ dag = DAG(
 
 git_repo_url = 'git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git'
 target_directory = '/tmp/mycloud-scripts'
-folder_path = os.path.expanduser('~/tmp/clone/ssh/')
+folder_path = '~/tmp/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
 
-def setup_ssh_key():
-    os.makedirs(folder_path, exist_ok=True)
-
-    ssh_key_file = os.path.join(folder_path, 'ssh_key')
-
-    with open(ssh_key_file, 'w') as f:
-        f.write(ssh_key)
-
-    os.chmod(ssh_key_file, 0o600)
-def list_files_in_folder():
-    files = os.listdir(folder_path)
-    for file in files:
-        print(f'File in folder: {file}')
-        
-setup_task = PythonOperator(
-    task_id='setup_ssh_key',
-    python_callable=setup_ssh_key,
+create_directory_task = BashOperator(
+    task_id='create_directory',
+    bash_command=f"""mkdir -p {folder_path}
+                     cd {folder_path}
+                     ls
+    """,
     dag=dag,
 )
-list_files_task = PythonOperator(
-    task_id='list_files_in_folder',
-    python_callable=list_files_in_folder,
-    dag=dag,
-)
+
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=(
@@ -58,4 +43,4 @@ clone_task = BashOperator(
     dag=dag,
 )
 
-setup_task >> list_files_task >> clone_task
+create_directory_task >> clone_task
