@@ -25,7 +25,10 @@ target_directory = '/tmp/mycloud-scripts'
 folder_path = os.path.expanduser('~/tmp/clone/ssh/')
 
 ssh_key = Variable.get("ssh_key")
-
+def create_and_write_file():
+    with open(f'{folder_path}ssh_key', 'w') as file:
+        file.write(ssh_key)
+        
 create_directory_task = BashOperator(
     task_id='create_directory',
     bash_command=f"""mkdir -p {folder_path}
@@ -33,7 +36,16 @@ create_directory_task = BashOperator(
     """,
     dag=dag,
 )
-
+create_file_task = PythonOperator(
+    task_id='create_file',
+    python_callable=create_and_write_file,
+    dag=dag,
+)
+print_file_task = BashOperator(
+    task_id='print_file',
+    bash_command=f'cat {folder_path}ssh_key',
+    dag=dag,
+)
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=(
@@ -42,4 +54,4 @@ clone_task = BashOperator(
     dag=dag,
 )
 
-create_directory_task >> clone_task
+create_directory_task >> create_file_task >> print_file_task >> clone_task
