@@ -45,7 +45,7 @@ setup_task = PythonOperator(
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=(
-        f'ssh-agent bash -c "ssh-add {folder_path}/ssh_key_file && git clone {git_repo_url} {target_directory}"'
+        f'ssh-agent bash -c "ssh-add {folder_path}ssh_key_file && git clone {git_repo_url} {target_directory}"'
     ),
     dag=dag,
 )
