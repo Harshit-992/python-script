@@ -1,7 +1,9 @@
 from airflow import DAG
+from airflow.operators.python_operator import PythonOperator
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
+import os
 
 default_args = {
     'owner': 'airflow',
@@ -18,17 +20,34 @@ dag = DAG(
     catchup=False,
 )
 
-# Define the GitLab repository URL and target directory
-git_repo_url = 'https://github.com/Harshit-992/python-script.git'
-target_directory = '/tmp/mycloud-scripts'  # Adjust the target directory
+git_repo_url = 'git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git'
+target_directory = '/tmp/mycloud-scripts'
+folder_path = '/root/clone/ssh/'
 
-# Retrieve the SSH key from the Airflow Variable
 ssh_key = Variable.get("ssh_key")
+
+def setup_ssh_key():
+    os.makedirs(folder_path, exist_ok=True)
+
+    ssh_key_file = os.path.join(folder_path, 'ssh_key')
+
+    with open(ssh_key_file, 'w') as f:
+        f.write(ssh_key)
+
+    os.chmod(ssh_key_file, 0o600)
+
+setup_task = PythonOperator(
+    task_id='setup_ssh_key',
+    python_callable=setup_ssh_key,
+    dag=dag,
+)
+
 clone_task = BashOperator(
     task_id='clone_repo',
     bash_command=(
-        f'git clone {git_repo_url} '
-        f'{target_directory}'
+        f'ssh-agent bash -c "ssh-add {folder_path}/ssh_key && git clone {git_repo_url} {target_directory}"'
     ),
     dag=dag,
 )
+
+setup_task >> clone_task
