@@ -29,7 +29,6 @@ ssh_key = Variable.get("ssh_key")
 create_directory_task = BashOperator(
     task_id='create_directory',
     bash_command=f"""mkdir -p {folder_path}
-                     cd {folder_path}
                      ls
     """,
     dag=dag,
