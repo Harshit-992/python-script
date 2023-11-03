@@ -29,26 +29,16 @@ ssh_key = Variable.get("ssh_key")
 create_directory_task = BashOperator(
     task_id='create_directory',
     bash_command=f"""pwd
-                     ls  ~/pvc-3377d6a6-3e14-4460-b90d-684d17d91d6b	
                      mkdir -p {folder_path}
                      echo "{ssh_key}" > {folder_path}ssh_key
                      ls {folder_path}
                      cat {folder_path}ssh_key
+                     ls {folder_path}
+                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git {target_directory}'
+                     ls {target_directory}
 
     """,
     dag=dag,
 )
 
-clone_task = BashOperator(
-    task_id='clone_repo',
-    bash_command=(f"""pwd
-                      ls ~/pvc-3377d6a6-3e14-4460-b90d-684d17d91d6b	
-                      ls {folder_path}
-                      ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git {target_directory}'
-                      ls {target_directory}
-    """
-    ),
-    dag=dag,
-)
 
-create_directory_task >> clone_task
