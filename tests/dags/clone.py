@@ -39,8 +39,10 @@ create_directory_task = BashOperator(
 
 clone_task = BashOperator(
     task_id='clone_repo',
-    bash_command=(
-        f'ssh-agent bash -c "ssh-add {folder_path}ssh_key && git clone {git_repo_url} {target_directory}"'
+    bash_command=(f"""ls {folder_path}
+                      ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git {target_directory}'
+                      ls {target_directory}
+    """
     ),
     dag=dag,
 )
