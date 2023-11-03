@@ -22,14 +22,14 @@ dag = DAG(
 
 git_repo_url = 'git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git'
 target_directory = '/tmp/mycloud-scripts'
-folder_path = '~/tmp/clone/ssh/'
+folder_path = os.path.expanduser('~/tmp/clone/ssh/')
 
 ssh_key = Variable.get("ssh_key")
 
 create_directory_task = BashOperator(
     task_id='create_directory',
     bash_command=f"""mkdir -p {folder_path}
-                     ls
+                     ls {folder_path}
     """,
     dag=dag,
 )
