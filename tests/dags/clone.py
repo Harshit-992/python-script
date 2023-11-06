@@ -38,6 +38,31 @@ ri_config = BashOperator(
                      touch /home/airflow/.ssh/known_hosts
                      ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
                      chmod 600 {folder_path}ssh_key
+                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/ckdataprocessengine.git '
+                     ls 
+                     cd ckdataprocessengine
+                     /home/ubuntu/.sdkman/candidates/sbt/current/bin/sbt clean
+                     /home/ubuntu/.sdkman/candidates/sbt/current/bin/sbt assembly
+                     ls
+                     git checkout ck-data-pipeline-auto-demo-uat
+                                         
+
+    """,
+    dag=dag,
+)
+
+ri_config = BashOperator(
+    task_id='ri_config',
+    bash_command=f"""pwd
+                     mkdir -p {folder_path}
+                     echo "{ssh_key}" > {folder_path}ssh_key
+                     ls {folder_path}
+                     cat {folder_path}ssh_key
+                     ls {folder_path}
+                     mkdir -p /home/airflow/.ssh
+                     touch /home/airflow/.ssh/known_hosts
+                     ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
+                     chmod 600 {folder_path}ssh_key
                      ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git '
                      ls 
                      cd mycloud-scripts
