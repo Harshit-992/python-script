@@ -26,8 +26,8 @@ folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
 
-create_directory_task = BashOperator(
-    task_id='create_directory',
+ri_config = BashOperator(
+    task_id='ri_config',
     bash_command=f"""pwd
                      mkdir -p {folder_path}
                      echo "{ssh_key}" > {folder_path}ssh_key
@@ -43,7 +43,28 @@ create_directory_task = BashOperator(
                      cd mycloud-scripts
                      ls
                      git checkout ck-data-pipeline-auto-demo-uat
-                     python3 optimized_config/auto_ri_config.py 2023 10
+                     python3 optimized_config/auto_ri_config.py 2023 10                     
+
+    """,
+    dag=dag,
+)
+refresh_buckets_data = BashOperator(
+    task_id='refresh_buckets_data',
+    bash_command=f"""pwd
+                     mkdir -p {folder_path}
+                     echo "{ssh_key}" > {folder_path}ssh_key
+                     ls {folder_path}
+                     cat {folder_path}ssh_key
+                     ls {folder_path}
+                     mkdir -p /home/airflow/.ssh
+                     touch /home/airflow/.ssh/known_hosts
+                     ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
+                     chmod 600 {folder_path}ssh_key
+                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/mycloud-scripts.git '
+                     ls 
+                     cd mycloud-scripts
+                     ls
+                     git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
                      
 
