@@ -26,8 +26,8 @@ folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
 
-ri_config = BashOperator(
-    task_id='ri_config',
+build_jar = BashOperator(
+    task_id='build_jar',
     bash_command=f"""pwd
                      mkdir -p {folder_path}
                      echo "{ssh_key}" > {folder_path}ssh_key
