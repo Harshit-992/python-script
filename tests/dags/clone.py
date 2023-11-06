@@ -44,6 +44,8 @@ create_directory_task = BashOperator(
                      ls
                      git checkout ck-data-pipeline-auto-demo-uat
                      python3 optimized_config/auto_ri_config.py 2023 10
+                     python3 ck_auto_demo_emr/buckets_json.py
+                     
 
     """,
     dag=dag,
