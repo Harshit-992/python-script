@@ -26,33 +26,33 @@ folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
 
-build_jar = BashOperator(
-    task_id='build_jar',
-    bash_command=f"""pwd
-                     mkdir -p {folder_path}
-                     echo "{ssh_key}" > {folder_path}ssh_key
-                     ls {folder_path}
-                     cat {folder_path}ssh_key
-                     ls {folder_path}
-                     mkdir -p /home/airflow/.ssh
-                     touch /home/airflow/.ssh/known_hosts
-                     ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
-                     chmod 600 {folder_path}ssh_key
-                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/ckdataprocessengine.git '
-                     git checkout prod-merge-CKPIP-28
-                     ls 
-                     cd ckdataprocessengine
-                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
-                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
-                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
-                     aws s3 cp target/scala-2.12/CkDataProcessEngine-assembly-0.1.jar  s3://ck-data-pipeline-auto-demo-config-prod-data/spark_utility/90/
-                     ls
+# build_jar = BashOperator(
+#     task_id='build_jar',
+#     bash_command=f"""pwd
+#                      mkdir -p {folder_path}
+#                      echo "{ssh_key}" > {folder_path}ssh_key
+#                      ls {folder_path}
+#                      cat {folder_path}ssh_key
+#                      ls {folder_path}
+#                      mkdir -p /home/airflow/.ssh
+#                      touch /home/airflow/.ssh/known_hosts
+#                      ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
+#                      chmod 600 {folder_path}ssh_key
+#                      ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/ckdataprocessengine.git '
+#                      git checkout prod-merge-CKPIP-28
+#                      ls 
+#                      cd ckdataprocessengine
+#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
+#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
+#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
+#                      aws s3 cp target/scala-2.12/CkDataProcessEngine-assembly-0.1.jar  s3://ck-data-pipeline-auto-demo-config-prod-data/spark_utility/90/
+#                      ls
                      
                                          
 
-    """,
-    dag=dag,
-)
+#     """,
+#     dag=dag,
+# )
 
 ri_config = BashOperator(
     task_id='ri_config',
@@ -94,7 +94,7 @@ refresh_buckets_data = BashOperator(
                      ls
                      git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
-                     
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow refresh-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
 
     """,
     dag=dag,
