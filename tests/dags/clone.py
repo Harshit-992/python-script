@@ -25,7 +25,11 @@ target_directory = '/tmp/mycloud-scripts'
 folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
-
+sbt_about_task = BashOperator(
+    task_id='sbt_about_task',
+    bash_command='sbt about',
+    dag=dag,
+)
 build_jar = BashOperator(
     task_id='build_jar',
     bash_command=f"""pwd
