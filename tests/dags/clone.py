@@ -94,9 +94,9 @@ refresh_buckets_data = BashOperator(
                      ls
                      git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow refresh-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     # python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow refresh-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 89 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 89 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
 
     """,
     dag=dag,
