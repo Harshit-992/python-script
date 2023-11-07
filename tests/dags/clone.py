@@ -25,11 +25,7 @@ target_directory = '/tmp/mycloud-scripts'
 folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
-sbt_about_task = BashOperator(
-    task_id='sbt_about_task',
-    bash_command='sbt about',
-    dag=dag,
-)
+
 build_jar = BashOperator(
     task_id='build_jar',
     bash_command=f"""pwd
@@ -47,9 +43,8 @@ build_jar = BashOperator(
                      ls 
                      cd ckdataprocessengine
                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
-                     sleep 2m
-                     sbt clean
-                     sbt assembly
+                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
+                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
                      ls
                      
                                          
