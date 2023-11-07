@@ -45,6 +45,7 @@ build_jar = BashOperator(
                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
+                     aws s3 cp target/scala-2.12/CkDataProcessEngine-assembly-0.1.jar  s3://ck-data-pipeline-auto-demo-config-prod-data/spark_utility/90/
                      ls
                      
                                          
