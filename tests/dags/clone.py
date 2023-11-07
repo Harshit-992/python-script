@@ -42,6 +42,7 @@ build_jar = BashOperator(
                      git checkout prod-merge-CKPIP-28
                      ls 
                      cd ckdataprocessengine
+                     source /root/.sdkman/bin/sdkman-init.sh
                      sbt about
                      sbt clean
                      sbt assembly
