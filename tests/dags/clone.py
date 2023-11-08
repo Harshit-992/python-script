@@ -25,33 +25,8 @@ target_directory = '/tmp/mycloud-scripts'
 folder_path = '~/clone/ssh/'
 
 ssh_key = Variable.get("ssh_key")
-builds_jar = BashOperator(
-    task_id='builds_jar',
-    bash_command=f"""pwd
-                     mkdir -p {folder_path}
-                     echo "{ssh_key}" > {folder_path}ssh_key
-                     ls {folder_path}
-                     cat {folder_path}ssh_key
-                     ls {folder_path}
-                     mkdir -p /home/airflow/.ssh
-                     touch /home/airflow/.ssh/known_hosts
-                     ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
-                     chmod 600 {folder_path}ssh_key
-                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/ckdataprocessengine.git '
-                     git checkout prod-merge-CKPIP-28
-                     ls 
-                     cd ckdataprocessengine
-                     sleep 30m
-                     ls
-                     
-                                         
-
-    """,
-    dag=dag,
-)
-
-# build_jar = BashOperator(
-#     task_id='build_jar',
+# builds_jar = BashOperator(
+#     task_id='builds_jar',
 #     bash_command=f"""pwd
 #                      mkdir -p {folder_path}
 #                      echo "{ssh_key}" > {folder_path}ssh_key
@@ -66,10 +41,7 @@ builds_jar = BashOperator(
 #                      git checkout prod-merge-CKPIP-28
 #                      ls 
 #                      cd ckdataprocessengine
-#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
-#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
-#                      /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
-#                      aws s3 cp target/scala-2.12/CkDataProcessEngine-assembly-0.1.jar  s3://ck-data-pipeline-auto-demo-config-prod-data/spark_utility/91/
+#                      sleep 30m
 #                      ls
                      
                                          
@@ -77,6 +49,36 @@ builds_jar = BashOperator(
 #     """,
 #     dag=dag,
 # )
+
+build_jar = BashOperator(
+    task_id='build_jar',
+    bash_command=f"""pwd
+                     mkdir -p {folder_path}
+                     echo "{ssh_key}" > {folder_path}ssh_key
+                     ls {folder_path}
+                     cat {folder_path}ssh_key
+                     ls {folder_path}
+                     mkdir -p /home/airflow/.ssh
+                     touch /home/airflow/.ssh/known_hosts
+                     ssh-keyscan gitlab.intelligrape.net >> ~/.ssh/known_hosts
+                     chmod 600 {folder_path}ssh_key
+                     ssh-agent bash -c 'ssh-add {folder_path}ssh_key; git clone git@gitlab.intelligrape.net:tothenew/ckdataprocessengine.git '
+                     git checkout prod-merge-CKPIP-28
+                     ls 
+                     cd ckdataprocessengine
+                     git checkout prod-merge-CKPIP-28
+                     git branch
+                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt about
+                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt clean
+                     /home/airflow/.sdkman/candidates/sbt/1.9.7/bin/sbt assembly
+                     aws s3 cp target/scala-2.12/CkDataProcessEngine-assembly-0.1.jar  s3://ck-data-pipeline-auto-demo-config-prod-data/spark_utility/91/
+                     ls
+                     
+                                         
+
+    """,
+    dag=dag,
+)
 
 # ri_config = BashOperator(
 #     task_id='ri_config',
