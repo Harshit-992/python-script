@@ -20,7 +20,13 @@ with DAG('hello_airflow_dag', default_args=default_args, schedule_interval=None,
         task_id='print_hello_task',
         python_callable=print_hello
     )
+    ri_config = BashOperator(
+    task_id='ri_config',
+    bash_command=f"""pwd
+                     sleep 40m                     
 
-# Define the task order: print_hello_task should run.
-print_hello_task
+    """,
+    dag=dag,
+)
+
 
