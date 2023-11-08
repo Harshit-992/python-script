@@ -117,8 +117,7 @@ emr_process = BashOperator(
                      ls
                      git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
-                     sleep 15m
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 90 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     sleep 30m
 
     """,
     dag=dag,
