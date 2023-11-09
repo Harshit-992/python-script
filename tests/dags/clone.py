@@ -19,6 +19,18 @@ def task_failure_callback(context):
 
     slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
     slack_hook.send(text=slack_msg)
+
+def task_success_callback(context):
+    slack_msg = f"""
+    :large_green_circle: Airflow Task Succeded.
+    *Task*: {context.get('task_instance').task_id}
+    *Dag*: {context.get('task_instance').dag_id}
+    *Execution Time*: {context.get('execution_date')}
+    *Log Url*: {context.get('task_instance').log_url}
+    """
+
+    slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
+    slack_hook.send(text=slack_msg)
     
 default_args = {
     'owner': 'airflow',
@@ -138,7 +150,7 @@ emr_process = BashOperator(
                      python3 ck_auto_demo_emr/buckets_json.py
                      python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
                      python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
-
+                     on_success_callback=task_success_callback
     """,
     dag=dag,
 )
