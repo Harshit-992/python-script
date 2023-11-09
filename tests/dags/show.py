@@ -4,7 +4,7 @@ from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.hooks.base_hook import BaseHook
-from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
+from airflow.providers.slack.operators.slack_webhook import SlackWebhookHook
 
 def task_failure_callback(context):
     slack_msg = f"""
