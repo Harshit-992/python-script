@@ -58,7 +58,7 @@ list_files = BashOperator(
     task_id='list_files',
     bash_command='ls',
     dag=dag,
-    on_success_callback: task_success_callback
+    on_success_callback=task_success_callback
 )
 
 # Set the task dependencies
