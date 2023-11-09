@@ -39,4 +39,4 @@ with DAG('print_name_dag', default_args=default_args, schedule_interval=None, ca
     )
 
 # Define the task order: the three tasks should run sequentially.
-[print_name_task_1, print_name_task_2] >> print_name_task_3
+print_name_task_1 >> print_name_task_3
