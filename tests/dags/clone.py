@@ -4,19 +4,35 @@ from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
 from airflow.models import Variable
 import os
+from datetime import datetime, timedelta
+from airflow.hooks.base_hook import BaseHook
+from airflow.providers.slack.operators.slack_webhook import SlackWebhookHook
 
+def task_failure_callback(context):
+    slack_msg = f"""
+    :red_circle: Airflow Task Failed.
+    *Task*: {context.get('task_instance').task_id}
+    *Dag*: {context.get('task_instance').dag_id}
+    *Execution Time*: {context.get('execution_date')}
+    *Log Url*: {context.get('task_instance').log_url}
+    """
+
+    slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
+    slack_hook.send(text=slack_msg)
+    
 default_args = {
     'owner': 'airflow',
     'start_date': days_ago(1),
     'depends_on_past': False,
-    'retries': 1,
+    'retries': 0,
+    'on_failure_callback': task_failure_callback
 }
 
 dag = DAG(
     'git_clone_from_gitlab',
     default_args=default_args,
     description='Clone a GitLab repository using SSH key',
-    schedule_interval=None,  # This DAG is not scheduled
+    schedule_interval=None,  
     catchup=False,
 )
 
