@@ -29,7 +29,7 @@ default_args = {
 }
 
 dag = DAG(
-    'git_clone_from_gitlab',
+    'auto_demo_processing',
     default_args=default_args,
     description='Clone a GitLab repository using SSH key',
     schedule_interval=None,  
@@ -164,4 +164,4 @@ master_refresh = BashOperator(
     """,
     dag=dag,
 )
-build_jar >> ri_config >> refresh_data >> emr_process >> master_refresh
+[build_jar, ri_config, refresh_data] >> emr_process >> master_refresh
