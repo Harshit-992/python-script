@@ -1,15 +1,10 @@
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
-from airflow.providers.slack.hooks.slack_webhook import SlackWebhookHook
-
-default_args = {
-    'owner': 'airflow',
-    'start_date': days_ago(1),
-    'depends_on_past': False,
-    'retries': 0,
-    'on_failure_callback': task_failure_callback
-}
+from datetime import datetime, timedelta
+from airflow import DAG
+from airflow.hooks.base_hook import BaseHook
+from airflow.providers.slack.operators.slack_webhook import SlackWebhookOperator
 
 def task_failure_callback(context):
     slack_msg = f"""
@@ -22,6 +17,14 @@ def task_failure_callback(context):
 
     slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
     slack_hook.send(text=slack_msg)
+    
+default_args = {
+    'owner': 'airflow',
+    'start_date': days_ago(1),
+    'depends_on_past': False,
+    'retries': 0,
+    'on_failure_callback': task_failure_callback
+}
 
 dag = DAG(
     'show_current_directory_and_files',
