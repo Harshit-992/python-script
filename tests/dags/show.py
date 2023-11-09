@@ -17,7 +17,19 @@ def task_failure_callback(context):
 
     slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
     slack_hook.send(text=slack_msg)
-    
+
+def task_success_callback(context):
+    slack_msg = f"""
+    :green_circle: Airflow Task Succeded.
+    *Task*: {context.get('task_instance').task_id}
+    *Dag*: {context.get('task_instance').dag_id}
+    *Execution Time*: {context.get('execution_date')}
+    *Log Url*: {context.get('task_instance').log_url}
+    """
+
+    slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
+    slack_hook.send(text=slack_msg)
+
 default_args = {
     'owner': 'airflow',
     'start_date': days_ago(1),
@@ -37,7 +49,7 @@ dag = DAG(
 # Use the "pwd" command to display the current directory
 show_current_directory = BashOperator(
     task_id='show_current_directory',
-    bash_command='pw',
+    bash_command='pwd',
     dag=dag,
 )
 
@@ -46,6 +58,7 @@ list_files = BashOperator(
     task_id='list_files',
     bash_command='ls',
     dag=dag,
+    on_success_callback: task_success_callback
 )
 
 # Set the task dependencies
