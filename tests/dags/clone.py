@@ -148,4 +148,4 @@ master_refresh = BashOperator(
     """,
     dag=dag,
 )
- build_jar >> ri_config >> refresh_data >> emr_process >> master_refresh
+  build_jar >> ri_config >> refresh_data >> emr_process >> master_refresh
