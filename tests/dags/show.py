@@ -20,7 +20,7 @@ def task_failure_callback(context):
 
 def task_success_callback(context):
     slack_msg = f"""
-    :green_circle: Airflow Task Succeded.
+    :large_green_circle: Airflow Task Succeded.
     *Task*: {context.get('task_instance').task_id}
     *Dag*: {context.get('task_instance').dag_id}
     *Execution Time*: {context.get('execution_date')}
