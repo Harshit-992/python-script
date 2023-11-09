@@ -1,13 +1,27 @@
 from airflow import DAG
 from airflow.operators.bash_operator import BashOperator
 from airflow.utils.dates import days_ago
+from airflow.providers.slack.hooks.slack_webhook import SlackWebhookHook
 
 default_args = {
     'owner': 'airflow',
     'start_date': days_ago(1),
     'depends_on_past': False,
-    'retries': 1,
+    'retries': 0,
+    'on_failure_callback': task_failure_callback
 }
+
+def task_failure_callback(context):
+    slack_msg = f"""
+    :red_circle: Airflow Task Failed.
+    *Task*: {context.get('task_instance').task_id}
+    *Dag*: {context.get('task_instance').dag_id}
+    *Execution Time*: {context.get('execution_date')}
+    *Log Url*: {context.get('task_instance').log_url}
+    """
+
+    slack_hook = SlackWebhookHook(slack_webhook_conn_id='slack_conn')
+    slack_hook.send(text=slack_msg)
 
 dag = DAG(
     'show_current_directory_and_files',
@@ -20,7 +34,7 @@ dag = DAG(
 # Use the "pwd" command to display the current directory
 show_current_directory = BashOperator(
     task_id='show_current_directory',
-    bash_command='pwd',
+    bash_command='pw',
     dag=dag,
 )
 
