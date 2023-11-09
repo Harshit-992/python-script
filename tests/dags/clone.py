@@ -150,9 +150,10 @@ emr_process = BashOperator(
                      python3 ck_auto_demo_emr/buckets_json.py
                      python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
                      python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
-                     on_success_callback=task_success_callback
+                     
     """,
     dag=dag,
+    on_success_callback=task_success_callback
 )
 master_refresh = BashOperator(
     task_id='master_refresh',
