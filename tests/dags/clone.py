@@ -125,7 +125,7 @@ refresh_data = BashOperator(
                      ls
                      git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow refresh-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 93 --flow refresh-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
 
     """,
     dag=dag,
@@ -148,8 +148,8 @@ emr_process = BashOperator(
                      ls
                      git checkout ck-master-refresh-emr-pipeline-auto-demo
                      python3 ck_auto_demo_emr/buckets_json.py
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
-                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 92 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 93 --flow process-data --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
+                     python3 ck_auto_demo_emr/main.py --year 2023 --month 10 --app ck-auto-demo --env prod --build_number 93 --flow terminate-cluster --template payer --payer '674600239845,741843927392' --core_node_spot_percent 80
                      
     """,
     dag=dag,
@@ -172,7 +172,7 @@ master_refresh = BashOperator(
                      cd mycloud-scripts
                      ls
                      git checkout ck-payer-analytics-snowflake-demo
-                     python3 ck_auto_emr_demo/main.py --year 2023 --month 10 --env 'prod' --payer '674600239845,741843927392' --build_number '92'
+                     python3 ck_auto_emr_demo/main.py --year 2023 --month 10 --env 'prod' --payer '674600239845,741843927392' --build_number '93'
                    
     """,
     dag=dag,
